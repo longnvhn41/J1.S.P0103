@@ -47,5 +47,5 @@ public class J1SP0103 {
             System.out.println("Date1 is equal to Date2");
         }
     }
-    //Nguyen Van Long
+    //Nguyen Van Long_HA140412
 }
