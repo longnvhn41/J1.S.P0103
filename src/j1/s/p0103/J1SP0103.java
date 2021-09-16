@@ -48,5 +48,6 @@ public class J1SP0103 {
         }
     }
     //Thêm chức năng.
-	//F1....F2
+	//F1....F2hahaha
+
 }
