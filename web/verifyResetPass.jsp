@@ -1,6 +1,6 @@
 <%-- 
-    Document   : forgetPass
-    Created on : Sep 29, 2021, 11:42:33 PM
+    Document   : verifyResetPass
+    Created on : Oct 12, 2021, 11:21:21 AM
     Author     : GHC
 --%>
 
@@ -37,10 +37,10 @@
     <body>
 
         <div class="container">
-            <form action="forgetPass?service=forget" method="POST">
-                <h4 style="color: red">${mess}</h4> 
-                <h4 style="color: red">${alert}</h4> 
-                Email: <input type="text" name="email"/><br>
+            <form action="forgetPass?service=checkCode" method="POST">
+                <h4 style="color: red">${error}</h4> 
+                Check Code <input type="text" name="authcode"/><br>
+                New password: <input type="password" value="${tempPass}" name="newPass"/><br>
                 <input style="margin-top: 15px" type="submit" value="submit"/>
             </form>
         </div>

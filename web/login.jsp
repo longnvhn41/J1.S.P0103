@@ -54,7 +54,7 @@
                             Login
                         </span>
                         <h4 style="color: #34eb61">${thongBao}</h4>
-                        
+                        <p style="color: #e0a800; margin-bottom: 25px"><b>${mess1}</b></p>
                         <c:if test="${thongbao!=null}">
                             <h4 style="color: #e0a800; margin-bottom: 30px"><%=thongbao%></h4>
                         </c:if>
