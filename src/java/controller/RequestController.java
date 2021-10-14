@@ -45,9 +45,9 @@ public class RequestController extends HttpServlet {
             if (service.equals("becomeMentor")) {
                 String skill= request.getParameter("skill");
                 int id = Integer.parseInt(request.getParameter("id"));
-                String mess = "Become Mentor: "+skill;
+                String sid = request.getParameter("nameSkill");
                 int status = 0;
-                dao.addRequest(id, mess, status);
+                dao.addRequest(id, sid, status);
                 response.sendRedirect("homepage.jsp");
             }
         }

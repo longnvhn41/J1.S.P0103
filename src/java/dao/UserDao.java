@@ -47,6 +47,7 @@ public class UserDao {
         Random rnd = new Random();
         return rnd.nextInt((max - min) + 1) + min;
     }
+
     public String getRandom2(int numberOfCharactor) {
         String alpha = "abcdefghijklmnopqrstuvwxyz"; // a-z
         String alphaUpperCase = alpha.toUpperCase(); // A-Z
@@ -60,13 +61,13 @@ public class UserDao {
         }
         return sb.toString();
     }
-    
+
     public static void send(String to, String sub,
             String msg, final String user, final String pass) {
         //Tạo 1 Properties(key-value)
         Properties props = new Properties();
 
-       //Thông số kết nối tới Smtp Server--> đăng nhập email
+        //Thông số kết nối tới Smtp Server--> đăng nhập email
         props.put("mail.smtp.host", "smtp.gmail.com");
         //below mentioned mail.smtp.port is optional
         props.put("mail.smtp.port", "587");
@@ -101,7 +102,7 @@ public class UserDao {
         }
     }
 
-    public int addCustomer(String cname, String account, String password, String email,
+    public int addUser(String cname, String account, String password, String email,
             String phone, String dob, int gender, String address, int role, String ava) {
 
         int n = 0;
@@ -118,7 +119,6 @@ public class UserDao {
             pre.setInt(7, gender);
             pre.setString(8, address);
             pre.setInt(9, role);
-            ava = null;
             pre.setString(10, ava);
 
             n = pre.executeUpdate();
@@ -198,8 +198,8 @@ public class UserDao {
         return null;
     }
 
-    public void updateUser(String id, String name,  String acc, String pass, String email,
-                                String phone,String dob, String sex, String address) {
+    public void updateUser(String id, String name, String acc, String pass, String email,
+            String phone, String dob, String sex, String address) {
         String sql = "update [user] set full_name=?, account=?, "
                 + "[password]=?,email=?,phone=?, "
                 + "DOB=?, gender=?, [address]=? where id=?";
@@ -220,8 +220,8 @@ public class UserDao {
 
         }
     }
-    
-    public void updatePassUser(String email, String password){
+
+    public void updatePassUser(String email, String password) {
         String sql = "Update [User] SET password=? WHERE email=?";
         try {
             PreparedStatement pre = conn.prepareStatement(sql);
@@ -232,7 +232,8 @@ public class UserDao {
             Logger.getLogger(UserDao.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-        public boolean changePass(String account, String password) {
+
+    public boolean changePass(String account, String password) {
         try {
             String sql = "  UPDATE [HappyProgramming].[dbo].[user]\n"
                     + "SET [password] = ? WHERE [account] =?";
@@ -245,9 +246,5 @@ public class UserDao {
         }
         return true;
     }
-
-    
-
-    
 
 }

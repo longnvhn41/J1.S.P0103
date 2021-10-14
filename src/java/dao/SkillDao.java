@@ -70,7 +70,7 @@ public class SkillDao {
     }
 
     // Lấy danh sách Skill
-    public static ArrayList<Skill> getSkillList() {
+    public ArrayList<Skill> getSkillList() {
 
         ArrayList<Skill> skillList = new ArrayList<>();
         String query = "select * from skill";
@@ -137,12 +137,12 @@ public class SkillDao {
     }
 
     public static void main(String[] args) {
-        ArrayList<Skill> a = SkillDao.getSkillList();
-        
-        
-        for (Skill skill : a) {
-            System.out.println(skill.toString());
-        }
+//        ArrayList<Skill> a = SkillDao.getSkillList();
+//        
+//        
+//        for (Skill skill : a) {
+//            System.out.println(skill.toString());
+//        }
     }
      
 }

@@ -1,3 +1,7 @@
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="entity.Skill"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%-- 
     Document   : userProfile
     Created on : Sep 24, 2021, 4:50:51 PM
@@ -22,13 +26,7 @@
                 </div>
                 <form action="RequestController?service=becomeMentor&id=${sessionScope.user.id}" method="POST">
                     <div class="menter-register__body">
-                        <div class="menter-register__item">
-                            <label for="skill" class="menter-register__label">
-                                <p class="red-star">*</p>
-                                Chọn kĩ năng:
-                            </label>
-                            <input type="text" id="skill" class="mentor-register__input" name="skill" placeholder="Chọn kĩ năng">
-                        </div>
+
                         <div class="menter-register__item">
                             <label for="link-cv" class="menter-register__label">
                                 <p class="red-star">*</p>
@@ -43,6 +41,19 @@
                         <div class="menter-register__item">
                             <label for="link-linkedin" class="menter-register__label">Linkedin:</label>
                             <input type="" id="link-linkedin" class="mentor-register__input"> 
+                        </div>
+                        <div class="menter-register__item">
+                            <label for="skill" class="menter-register__label">
+                                <p class="red-star">*</p>
+                                Chọn kĩ năng:
+                            </label>
+                            <select name="nameSkill" class="mentor-register__input" multiple="true" size="6">
+                                <c:forEach var="o" items="${list}">
+                                    
+                                    <option value="${o.id}">${o.name}</option>
+                                </c:forEach>
+                                
+                            </select>
                         </div>
                         <div> 
                             <input style="margin-left: 350px" type="submit" value="Register" />

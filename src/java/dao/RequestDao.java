@@ -7,9 +7,7 @@ package dao;
 
 import context.DBConnect;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
-import java.text.SimpleDateFormat;
 
 /**
  *
@@ -28,7 +26,7 @@ public class RequestDao {
 
     public int addRequest(int menteeID, String mess, int status) {
         int n = 0;
-        //String sql="insert into request(mentee_id, [message],request_date,[status]) values (?,?,?,?)";
+        
         String sql = "insert into request(mentee_id, [message],[status]) values (?,?,?)";
         try {
             PreparedStatement pre = conn.prepareStatement(sql);

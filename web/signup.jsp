@@ -61,7 +61,7 @@
                             <div class="input-group">
                                 <label class="label">Full name</label>
                                 <div class="rs-select2 js-select-simple select--no-search">
-                                    <input class="input--style-4" type="text" name="fullname">
+                                    <input class="input--style-4" type="text" value="${sessionScope.user.name}" name="fullname">
 
                                 </div>
                             </div>
@@ -70,20 +70,20 @@
                                 <div class="col-2">
                                     <div class="input-group">
                                         <label class="label">Email</label>
-                                        <input class="input--style-4" type="email" name="email">
+                                        <input class="input--style-4" type="email" value="${sessionScope.user.email}" name="email">
                                     </div>
                                 </div>
                                 <div class="col-2">
                                     <div class="input-group">
                                         <label class="label">Phone Number</label>
-                                        <input class="input--style-4" type="text" name="phone">
+                                        <input class="input--style-4" type="text" value="${sessionScope.user.phone}" name="phone">
                                     </div>
                                 </div>
                             </div>
                             <div class="input-group">
                                 <label class="label">Username</label>
                                 <div class="rs-select2 js-select-simple select--no-search">
-                                    <input class="input--style-4" type="text" name="username">
+                                    <input class="input--style-4" type="text" value="${sessionScope.user.account}" name="username">
 
                                 </div>
                             </div>
@@ -91,13 +91,13 @@
                                 <div class="col-2">
                                     <div class="input-group">
                                         <label class="label">Password</label>
-                                        <input class="input--style-4" type="password" name="password">
+                                        <input class="input--style-4" type="password" value="${sessionScope.user.password}" name="password">
                                     </div>
                                 </div>
                                 <div class="col-2">
                                     <div class="input-group">
                                         <label class="label">Confirm Password</label>
-                                        <input class="input--style-4" type="password" name="rpassword">
+                                        <input class="input--style-4" type="password" value="${sessionScope.user.password}" name="rpassword">
                                     </div>
                                 </div>
                             </div>
@@ -107,7 +107,7 @@
                                 <div class="input-group">
                                     <label class="label">Birthday</label>
                                     <div class="input-group-icon">
-                                        <input class="input--style-4 js-datepicker" type="text" name="birthday">
+                                        <input class="input--style-4 js-datepicker" type="text" value="${sessionScope.user.dob}" name="birthday">
                                         <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
                                     </div>
                                 </div>
@@ -117,11 +117,11 @@
                                         <label class="label">Gender</label>
                                         <div class="p-t-10">
                                             <label class="radio-container m-r-45">Male
-                                                <input type="radio" checked="checked" name="gender" value="1">
+                                                <input type="radio" ${sessionScope.user.gender==1?"checked":""} name="gender" value="1">
                                                 <span class="checkmark"></span>
                                             </label>
                                             <label class="radio-container">Female
-                                                <input type="radio" name="gender" value="0">
+                                                <input type="radio" ${sessionScope.user.gender==0?"checked":""} name="gender" value="0">
                                                 <span class="checkmark"></span>
                                             </label>
                                         </div>
@@ -132,7 +132,7 @@
                             <div class="input-group">
                                 <label class="label">Address</label>
                                 <div class="rs-select2 js-select-simple select--no-search">
-                                    <input class="input--style-4" type="text" name="address">
+                                    <input class="input--style-4" type="text" value="${sessionScope.user.address}" name="address">
 
                                 </div>
                             </div>
