@@ -17,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -78,45 +77,23 @@ public class ForgetPassController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String service = request.getParameter("service");
             DBConnect dBConnect = new DBConnect();
-            if(service.equals("forget")){
-                UserDao d = new UserDao(dBConnect);
-                String email = request.getParameter("email");
-                User u = d.checkExitsEmail(email);
-                if(u==null){
-                    request.setAttribute("mess", "The email you entered did not exist, please try again!");
-                    request.getRequestDispatcher("forgetPass.jsp").forward(request, response);
-                }else{
-                    String userfrom = "longnvhn41@gmail.com";
-                    String passfrom = "nguyenvanlong98";
-                    String subject = "Reset Password";
-                    String code = d.getRandom2(6);
-                    String message = ("This is your code: " + code);
-                    UserDao.send(email, subject, message, userfrom, passfrom);
-                    HttpSession session1 = request.getSession();
-                    session1.setAttribute("rsUser", u);
-                    session1.setAttribute("rsCode", code);
-                    session1.setMaxInactiveInterval(10 * 60);
-                    response.sendRedirect("verifyResetPass.jsp");
-                }
-            }
-            if(service.equals("checkCode")){
-                HttpSession session = request.getSession(); 
-                User user = (User) session.getAttribute("rsUser");
-                String verifyCode = session.getAttribute("rsCode").toString();
-                UserDao dao = new UserDao(dBConnect);
-                String code = request.getParameter("authcode");
-                String pass = request.getParameter("newPass");
-                if (!verifyCode.equalsIgnoreCase(code)) {
-                    request.setAttribute("error", "sai mã xác minh");
-                    request.setAttribute("tempPass", pass);
-                    request.getRequestDispatcher("verifyResetPass.jsp").forward(request, response);
-                } else {
-                    dao.changePass(user.getAccount(), pass);
-                    session.setAttribute("verifyCode", null);
-                    response.sendRedirect("HomeP.jsp");
-                }
+            UserDao d = new UserDao(dBConnect);
+            String email = request.getParameter("email");
+            User u = d.checkExitsEmail(email);
+            if(u==null){
+                request.setAttribute("mess", "The email you entered did not exist, please try again!");
+                request.getRequestDispatcher("forgetPass.jsp").forward(request, response);
+            }else{
+                String userfrom = "longnvhn41@gmail.com";
+                String passfrom = "nguyenvanlong98";
+                String subject = "Reset Password";
+                String newPass = d.getRandom2(8);
+                d.updatePassUser(email, newPass);
+                String message = ("This is your new passoward: " + newPass);
+                UserDao.send(email, subject, message, userfrom, passfrom);
+                request.setAttribute("alert", "Password changed! Please check your email.");
+                request.getRequestDispatcher("homepage.jsp").forward(request, response); 
             }
         } catch (SQLException ex) {
             Logger.getLogger(ForgetPassController.class.getName()).log(Level.SEVERE, null, ex);

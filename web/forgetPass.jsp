@@ -37,7 +37,7 @@
     <body>
 
         <div class="container">
-            <form action="forgetPass?service=forget" method="POST">
+            <form action="forgetPass" method="POST">
                 <h4 style="color: red">${mess}</h4> 
                 <h4 style="color: red">${alert}</h4> 
                 Email: <input type="text" name="email"/><br>

@@ -74,8 +74,7 @@ public class LoginController extends HttpServlet {
             User u=d.checkUser(acc, password);
             if(u==null){
                 HttpSession session=request.getSession();
-                request.setAttribute("mess1", "Wrong password! Please enter again");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+                response.sendRedirect("login.jsp");
             }else{
                 Cookie usernameC = new Cookie("userC", acc);
                 Cookie passwordC = new Cookie("passC", password);
