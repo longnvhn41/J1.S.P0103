@@ -105,6 +105,7 @@
                         <!-- Phân quyền cho mentee-->
                         <c:if test="${sessionScope.user.role==1}">
                             <li><a href="UserController?service=becomeMentor&id=${sessionScope.user.id}">Become Mentor</a></li>
+                            <li><a href="RequestController?service=createRequest&id=${sessionScope.user.id}">Create Request</a></li>
                         </c:if>
                         <!-- Phân quyền cho mentor-->
                         <c:if test="${sessionScope.user.role==0}">

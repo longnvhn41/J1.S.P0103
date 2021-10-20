@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,6 +22,7 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -99,6 +101,30 @@ public class UserController extends HttpServlet {
 
             }
 //            
+            if (service.equals("login")) {
+                String acc = request.getParameter("username");
+                String password = request.getParameter("password");
+                User u=d.checkUser(acc, password);
+                if(u==null){
+                    HttpSession session=request.getSession();
+                    request.setAttribute("mess1", "Wrong password! Please enter again");
+                    request.getRequestDispatcher("login.jsp").forward(request, response);
+                }else{
+                    Cookie usernameC = new Cookie("userC", acc);
+                    Cookie passwordC = new Cookie("passC", password);
+                    usernameC.setMaxAge(60*60*24);
+                    if(request.getParameter("remember-me") != null){
+                        passwordC.setMaxAge(60*60*24);
+                    }else{
+                        passwordC.setMaxAge(0);
+                    }
+                    response.addCookie(usernameC);
+                    response.addCookie(passwordC);
+                    HttpSession session=request.getSession();
+                    session.setAttribute("user", u);
+                    request.getRequestDispatcher("homepage.jsp").forward(request, response);
+                    }
+            }
             if (service.equals("logout")) {
                 HttpSession session = request.getSession();
                 session.invalidate();
@@ -166,7 +192,6 @@ public class UserController extends HttpServlet {
                 request.setAttribute("list", list);
                 request.getRequestDispatcher("userProfile.jsp").forward(request, response);
             }
-
         }
     }
 

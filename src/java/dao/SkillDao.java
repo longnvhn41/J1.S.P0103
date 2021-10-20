@@ -74,8 +74,6 @@ public class SkillDao {
 
         ArrayList<Skill> skillList = new ArrayList<>();
         String query = "select * from skill";
-
-
         try {
             conn = new DBConnect().con;
             ps = conn.prepareStatement(query);
@@ -84,7 +82,6 @@ public class SkillDao {
             while (rs.next()) {
                 skillList.add(new Skill(rs.getInt("id"), rs.getString("name"), rs.getString("description")));
             }
-
             try{rs.close();} catch(Exception e){}    
             try{ps.close();} catch(Exception e){}   
             try{con.close();} catch(Exception e){}      

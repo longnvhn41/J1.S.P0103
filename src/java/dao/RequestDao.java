@@ -6,8 +6,11 @@
 package dao;
 
 import context.DBConnect;
+import entity.Request;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -24,18 +27,69 @@ public class RequestDao {
         this.dbConn = dbconn;
     }
 
-    public int addRequest(int menteeID, String mess, int status) {
-        int n = 0;
-        
-        String sql = "insert into request(mentee_id, [message],[status]) values (?,?,?)";
+    static Connection con;
+    static PreparedStatement ps;
+    static ResultSet rs;
+
+    public int getMaxRequestId() {
+        String query = "SELECT MAX(id)FROM Request";
+        int output = 0;
         try {
-            PreparedStatement pre = conn.prepareStatement(sql);
-            pre.setInt(1, menteeID);
-            pre.setString(2, mess);
-            pre.setInt(3, status);
-            n = pre.executeUpdate();
+            conn = new DBConnect().con;
+            PreparedStatement ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                output = rs.getInt(1);
+            }
+            try {
+                rs.close();
+            } catch (Exception e) {
+            }
+            try {
+                ps.close();
+            } catch (Exception e) {
+            }
+            try {
+                con.close();
+            } catch (Exception e) {
+            }
         } catch (Exception e) {
+            System.out.println(e);
+            output = -2;
         }
-        return n;
+        return output;
+    }
+
+    public void createRequest(Request request) {
+        String query = "insert into request values (?, null, ?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            conn = new DBConnect().con;
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, request.getMentee_id());
+            ps.setString(2, request.getMess());
+            ps.setDate(3, request.getDeadline() == null ? null : new java.sql.Date(request.getDeadline().getTime()));
+            ps.setDate(4, request.getCreationDate() == null ? null : new java.sql.Date(request.getCreationDate().getTime()));
+            ps.setDate(5, request.getFinishDate() == null ? null : new java.sql.Date(request.getFinishDate().getTime()));
+            ps.setInt(6, request.getStatus());
+            ps.setFloat(7, request.getDeadlineHour());
+            ps.setString(8, request.getTitle());
+            ps.executeUpdate();
+
+            try {
+                rs.close();
+            } catch (Exception e) {
+            }
+            try {
+                ps.close();
+            } catch (Exception e) {
+            }
+            try {
+                con.close();
+            } catch (Exception e) {
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
     }
 }

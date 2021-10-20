@@ -7,9 +7,18 @@ package controller;
 
 import context.DBConnect;
 import dao.RequestDao;
+import dao.RequestSkillDao;
+import dao.SkillDao;
+import entity.Request;
+import entity.RequestSkill;
+import entity.Skill;
+import entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -17,6 +26,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import sun.security.provider.certpath.ResponderId;
 
 /**
  *
@@ -39,16 +50,50 @@ public class RequestController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         DBConnect dBConnect = new DBConnect();
         RequestDao dao = new RequestDao(dBConnect);
+        SkillDao Sdao = new SkillDao(dBConnect);
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             String service = request.getParameter("service");
-            if (service.equals("becomeMentor")) {
-                String skill= request.getParameter("skill");
-                int id = Integer.parseInt(request.getParameter("id"));
-                String sid = request.getParameter("nameSkill");
-                int status = 0;
-                dao.addRequest(id, sid, status);
-                response.sendRedirect("homepage.jsp");
+            if (service.equals("createRequest")){ 
+                List<Skill> listSkill = Sdao.getSkillList();
+                request.setAttribute("listSkill", listSkill);
+                request.getRequestDispatcher("menteeCreateRequest.jsp").forward(request, response);
+            }
+            if (service.equals("createRequestAfter")){
+                HttpSession session = request.getSession();
+                User user = (User) session.getAttribute("user");
+                int userId = user.getId();
+                String title = request.getParameter("title");
+                java.util.Date deadline = null;
+                try {
+                    deadline = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("deadline"));
+                } catch (Exception e){
+                    
+                }
+
+                float deadlineHour = Float.parseFloat(request.getParameter("deadlineHours"));
+                String content = request.getParameter("content");
+                //1: Open, 0:closed, 2:Mentor accept
+                int status = 1;
+                
+                String[] skill = request.getParameterValues("skill");
+                if(skill.length > 3){
+                    List<Skill> listSkill = Sdao.getSkillList();
+                    request.setAttribute("listSkill", listSkill);
+                    request.setAttribute("alertMess1", "Không được chọn quá 3 kỹ năng");
+                    request.getRequestDispatcher("menteeCreateRequest.jsp").forward(request, response);
+                }else{
+                    RequestSkillDao rSDao = new RequestSkillDao(dBConnect);
+                    java.util.Date currentDate=new java.util.Date();
+                    Request r = new Request(userId, content, title, deadline, currentDate, status, deadlineHour);
+                    dao.createRequest(r);
+                    int Rid = dao.getMaxRequestId();
+                    for (String s : skill) {
+                        RequestSkill rs = new RequestSkill(Rid, Integer.parseInt(s));
+                        rSDao.createRequestSkill(rs);
+                    }
+                    request.getRequestDispatcher("homepage.jsp").forward(request, response);
+                }
             }
         }
     }
