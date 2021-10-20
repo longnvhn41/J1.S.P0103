@@ -58,4 +58,29 @@ public class RequestSkillDao {
             System.out.println(e);
         }
     }
+    
+    public void deleteSkillByRequestId(int requestId){
+        String query = "DELETE FROM request_skill WHERE request_id = ?";
+
+        try {
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, requestId);
+            ps.executeUpdate();
+
+            try {
+                rs.close();
+            } catch (Exception e) {
+            }
+            try {
+                ps.close();
+            } catch (Exception e) {
+            }
+            try {
+                con.close();
+            } catch (Exception e) {
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
 }

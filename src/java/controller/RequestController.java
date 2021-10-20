@@ -80,6 +80,10 @@ public class RequestController extends HttpServlet {
                 if(skill.length > 3){
                     List<Skill> listSkill = Sdao.getSkillList();
                     request.setAttribute("listSkill", listSkill);
+                    request.setAttribute("title", title);
+                    request.setAttribute("deadline", deadline);
+                    request.setAttribute("deadlineHour", deadlineHour);
+                    request.setAttribute("content", content);
                     request.setAttribute("alertMess1", "Không được chọn quá 3 kỹ năng");
                     request.getRequestDispatcher("menteeCreateRequest.jsp").forward(request, response);
                 }else{
@@ -90,6 +94,58 @@ public class RequestController extends HttpServlet {
                     int Rid = dao.getMaxRequestId();
                     for (String s : skill) {
                         RequestSkill rs = new RequestSkill(Rid, Integer.parseInt(s));
+                        rSDao.createRequestSkill(rs);
+                    }
+                    request.getRequestDispatcher("homepage.jsp").forward(request, response);
+                }
+            }if(service.equals("updateRequest")){
+                HttpSession ses = request.getSession();
+                User user = (User)ses.getAttribute("user");
+                int id = Integer.parseInt(request.getParameter("requestId"));
+                Request req = dao.getRequestById(id);
+                if(user.getId() != req.getMentee_id()){
+                    response.sendRedirect("homepage.login");
+                    return;
+                }
+                List <Skill> listSkill = Sdao.getSkillList();
+                List <Skill> listSkillRequest = Sdao.getSkillRequest(id);
+                
+                request.setAttribute("requestByMentee", req);
+                request.setAttribute("listSkill", listSkill);
+                request.setAttribute("listSkillRequest", listSkillRequest);
+
+                request.getRequestDispatcher("menteeUpdateRequest.jsp").forward(request, response);
+            }if(service.equals("updateRequestAfter")){
+                HttpSession session = request.getSession();
+                User user = (User) session.getAttribute("user");
+                int userId = user.getId();
+                int requestId = Integer.parseInt(request.getParameter("requestId"));
+                Request requestByMentee =dao.getRequestById(requestId);
+                List <Skill> listSkill = Sdao.getSkillList();
+                List <Skill> listSkillRequest = Sdao.getSkillRequest(requestId);
+                String title = request.getParameter("title");
+                java.util.Date deadline = null;
+                try {
+                    deadline = new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("deadline"));
+                } catch (Exception e){
+                    
+                }
+                float deadlineHour = Float.parseFloat(request.getParameter("deadlineHours"));
+                String content = request.getParameter("content");             
+                String[] skill = request.getParameterValues("skill");
+                if(skill.length > 3){
+                    request.setAttribute("requestByMentee", requestByMentee);
+                    request.setAttribute("listSkill", listSkill);
+                    request.setAttribute("listSkillRequest", listSkillRequest);
+                    request.setAttribute("alertMess1", "Không được chọn quá 3 kỹ năng");
+                    request.getRequestDispatcher("menteeUpdateRequest.jsp").forward(request, response);
+                }else{
+                    RequestSkillDao rSDao = new RequestSkillDao(dBConnect);
+                    dao.updateRequestByMentee(requestId, content, 1, deadlineHour, title, deadline, null);
+                    request.getRequestDispatcher("homepage.jsp").forward(request, response);
+                    rSDao.deleteSkillByRequestId(requestId);
+                    for (String s : skill) {
+                        RequestSkill rs = new RequestSkill(requestId, Integer.parseInt(s));
                         rSDao.createRequestSkill(rs);
                     }
                     request.getRequestDispatcher("homepage.jsp").forward(request, response);

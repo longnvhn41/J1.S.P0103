@@ -24,29 +24,29 @@
                 <div class="menter-register__heading">
                     <p class="heading-title">Update Request</p>
                 </div>
-                <form action="RequestController?service=updateRequestAfter" method="POST">
+                <form action="RequestController?service=updateRequestAfter&requestId=${requestByMentee.id}" method="POST">
                     <div class="menter-register__body">
-                        <p style="color:red;" >${alertMess1}</p>
+                        <p style="color:red;text-align:center" >${alertMess1}</p>
                         <div class="menter-register__item">
                             <label for="request_title" class="menter-register__label">
                                 <p class="red-star">*</p>
                                 Title:
                             </label>
-                            <input type="text" name="title" class="mentor-register__input" required> 
+                            <input type="text" name="title" class="mentor-register__input" value="${requestByMentee.title}" required> 
                         </div>
                         <div class="menter-register__item">
                             <label for="request_content" class="menter-register__label">
                                 <p class="red-star">*</p>
                                 Deadline:
                             </label>
-                            <input type="date" name="deadline" class="mentor-register__input" required></td>
+                            <input type="date" name="deadline" class="mentor-register__input" value="${requestByMentee.deadline}" required>
                         </div>
                         <div class="menter-register__item">
                             <label for="request_content" class="menter-register__label">
                                 <p class="red-star">*</p>
                                 Content:
                             </label>
-                            <input type="text" name="content" class="mentor-register__input" required> 
+                            <input type="text" name="content" class="mentor-register__input" value="${requestByMentee.mess}" require> 
                         </div>
                         <div class="menter-register__item">
                             <label for="skill" class="menter-register__label">
@@ -55,7 +55,11 @@
                             </label>
                             <select name="skill" class="mentor-register__input" multiple="true" size="6" multiple required>
                                 <c:forEach items="${listSkill}" var="i">                                                   
-                                    <option value="${i.id}" >${i.name}</option>
+                                    <%
+                                        ArrayList<Skill> listSkillRequest = (ArrayList<Skill>) request.getAttribute("listSkillRequest");
+                                        Skill i = (Skill) pageContext.getAttribute("i");
+                                    %>
+                                    <option value="${i.id}" <%=listSkillRequest.contains(i) ? "selected" : ""%>>${i.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
@@ -64,10 +68,10 @@
                                 <p class="red-star">*</p>
                                 Deadline Hours:
                             </label>
-                            <input type="number" min="0" step=".01" name="deadlineHours" class="mentor-register__input" required> 
+                            <input type="number" min="0" step=".01" name="deadlineHours" class="mentor-register__input" value="${requestByMentee.deadlineHour}" required> 
                         </div>
                         <div> 
-                            <input style="margin-left: 350px" type="submit" value="Register" />
+                            <input style="margin-left: 350px" type="submit" value="Update" />
                         </div>
                     </div>
                 </form>
